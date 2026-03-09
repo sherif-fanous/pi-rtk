@@ -1,0 +1,36 @@
+{
+  "name": "@sherif-fanous/pi-rtk",
+  "version": "0.1.0",
+  "description": "Pi extension that routes bash commands through rtk (Rust Token Killer) for LLM token savings",
+  "keywords": [
+    "pi",
+    "pi-coding-agent",
+    "pi-package",
+    "rtk"
+  ],
+  "homepage": "https://github.com/sherif-fanous/pi-rtk#readme",
+  "bugs": {
+    "url": "https://github.com/sherif-fanous/pi-rtk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sherif-fanous/pi-rtk.git"
+  },
+  "license": "MIT",
+  "author": "Sherif Fanous",
+  "type": "module",
+  "files": [
+    "*.ts",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*"
+  },
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}
