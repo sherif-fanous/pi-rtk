@@ -2,35 +2,37 @@
 
 ## Purpose
 
-Define the integration requirements for `pi-rtk` as a Pi Package and Extension.
+Define how `pi-rtk` integrates with Pi as an installable package that provides a replacement shell tool.
 
 ## Requirements
 
-### Requirement: Tool Overriding
+### Requirement: Bash Tool Integration
 
-The system MUST register a custom `bash` tool that replaces the default Pi `bash` tool.
+The system MUST provide a `bash` tool implementation that Pi uses when the `pi-rtk` package is loaded.
 
 #### Scenario: Extension activation
 
-- GIVEN the `pi-rtk` extension is loaded
-- WHEN the agent requests the `bash` tool
-- THEN the optimized version provided by `pi-rtk` MUST be used instead of the built-in one
+- GIVEN the `pi-rtk` extension is loaded by Pi
+- WHEN the agent invokes the `bash` tool
+- THEN Pi MUST use the `pi-rtk` `bash` tool implementation
+- AND shell command execution MUST pass through that implementation
 
-### Requirement: Package Discovery
+### Requirement: Pi Package Installability
 
-The system MUST be discoverable and installable as a standard Pi Package.
+The system MUST be installable and discoverable as a standard Pi package.
 
-#### Scenario: `package.json` Manifest
+#### Scenario: Package metadata
 
-- GIVEN a standard Pi installation
-- THEN the `package.json` MUST contain the `pi-package` keyword
-- AND the `pi` manifest MUST point to the extension entry point (`index.ts`)
+- GIVEN a Pi package installation flow
+- THEN the package metadata MUST identify the package as a Pi package
+- AND the package metadata MUST declare the extension entry point required to load the package
 
-### Requirement: SDK Compatibility
+### Requirement: Pi SDK Compatibility
 
-The extension MUST maintain compatibility with the `@mariozechner/pi-coding-agent` SDK.
+The package MUST remain compatible with the Pi extension runtime.
 
-#### Scenario: Peer Dependencies
+#### Scenario: Runtime loading
 
 - GIVEN the package is installed in a Pi environment
-- THEN it MUST treat the Pi SDK as a peer dependency to avoid module duplication
+- WHEN Pi loads the package
+- THEN the extension MUST load without requiring a bundled duplicate of the Pi SDK

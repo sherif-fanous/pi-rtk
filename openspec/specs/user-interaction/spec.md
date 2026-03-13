@@ -2,26 +2,38 @@
 
 ## Purpose
 
-Define the behavior of `pi-rtk` regarding resilience and user-facing feedback.
+Define the user-visible behavior of `pi-rtk`, including transparency during normal operation and resilience when shell optimization fails.
 
 ## Requirements
 
-### Requirement: Execution Resilience
+### Requirement: Non-Disruptive Fallback
 
-The system MUST NOT allow failures in the optimization layer to crash the host agent.
+Failures in the shell optimization layer MUST NOT interrupt normal shell tool usage.
 
-#### Scenario: Missing `rtk` binary
+#### Scenario: Optimization failure
 
-- GIVEN the `rtk` binary is not present in the system PATH
-- WHEN a command is executed
-- THEN the system MUST catch the execution error
-- AND fallback to the original command silently to ensure the agent remains functional
+- GIVEN a command submitted to the `bash` tool
+- WHEN shell optimization fails before command execution
+- THEN the command MUST still execute using normal shell behavior
+- AND the optimization failure MUST NOT crash, block, or disable the host agent
 
-### Requirement: Transparency
+### Requirement: Transparent Operation
 
-The optimization layer SHOULD be invisible to the user unless an error occurs that prevents core functionality.
+The optimization layer SHOULD remain invisible during normal use.
 
-#### Scenario: Standard Operation
+#### Scenario: Standard command execution
 
-- GIVEN normal command execution
-- THEN the system SHOULD NOT inject additional UI notifications or logs into the user's view, maintaining a seamless experience.
+- GIVEN normal shell command execution through the `bash` tool
+- THEN the system SHOULD NOT add user-facing notifications solely to report optimization activity
+- AND the user experience SHOULD remain consistent whether optimization is applied or bypassed
+
+### Requirement: Graceful Operation Without `rtk`
+
+The system MUST continue to provide normal shell execution when `rtk` is unavailable.
+
+#### Scenario: `rtk` is unavailable
+
+- GIVEN `rtk` is not installed, not resolvable on `PATH`, or otherwise unavailable to the optimization layer
+- WHEN a command is submitted to the `bash` tool
+- THEN the system MUST execute the original command unchanged
+- AND the user MUST retain normal shell tool functionality

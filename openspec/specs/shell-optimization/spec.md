@@ -2,35 +2,46 @@
 
 ## Purpose
 
-Transparently optimize shell command execution to reduce LLM token consumption while maintaining original command intent.
+Define how `pi-rtk` optimizes shell command execution to reduce LLM token consumption while preserving normal shell behavior when optimization cannot be applied.
 
 ## Requirements
 
-### Requirement: Command Rewriting
+### Requirement: Pre-Execution Optimization Attempt
 
-The system SHALL attempt to rewrite all shell commands using the `rtk` engine to optimize for token usage.
+The system MUST attempt to optimize shell commands before execution.
 
-#### Scenario: Command supported by `rtk`
+#### Scenario: Optimization succeeds
 
-- GIVEN a command that `rtk rewrite` can successfully transform
-- WHEN the command is passed to the `bash` tool
-- THEN the `bash` tool MUST execute the transformed version of the command
-- AND the execution context (CWD, environment) MUST be preserved
+- GIVEN a command submitted to the `bash` tool
+- WHEN the optimization layer successfully produces an optimized command
+- THEN the `bash` tool MUST execute the optimized command
+- AND the original execution context, including working directory and environment, MUST be preserved
 
-#### Scenario: Command NOT supported by `rtk`
+#### Scenario: Optimization cannot be applied
 
-- GIVEN a command where `rtk rewrite` returns a non-zero exit code
-- WHEN the command is passed to the `bash` tool
-- THEN the system MUST execute the original, unmodified command
-- AND the system SHALL NOT block the agent's progress
+- GIVEN a command submitted to the `bash` tool
+- WHEN the optimization layer cannot produce an optimized command
+- THEN the `bash` tool MUST execute the original command unchanged
+- AND command execution MUST continue without requiring agent intervention
 
-### Requirement: Transformation Latency
+### Requirement: `rtk`-Based Optimization
 
-The command transformation process MUST NOT significantly delay the agent's responsiveness.
+The system MUST perform shell optimization using the `rtk` rewrite mechanism.
 
-#### Scenario: `rtk` execution timeout
+#### Scenario: Rewrite delegation
 
-- GIVEN a command sent for rewriting
-- WHEN the `rtk` process takes longer than 5 seconds
-- THEN the system MUST terminate the rewrite attempt
-- AND fallback to the original command
+- GIVEN a command submitted to the `bash` tool
+- WHEN the system attempts shell optimization
+- THEN the system MUST delegate rewrite generation to `rtk`
+- AND the command executed by the `bash` tool MUST be the rewrite output when that rewrite succeeds
+
+### Requirement: Bounded Optimization Latency
+
+The optimization step MUST NOT materially degrade shell tool responsiveness.
+
+#### Scenario: Optimization exceeds time budget
+
+- GIVEN a command submitted for optimization
+- WHEN the optimization attempt exceeds its allowed time budget
+- THEN the optimization attempt MUST be abandoned
+- AND the original command MUST be executed unchanged
