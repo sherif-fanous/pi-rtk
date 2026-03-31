@@ -13,21 +13,16 @@
  * user's choice to exclude shell output from model context is preserved.
  */
 
+import { rtkify } from "@arthur-fontaine/rtkify";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import {
   createBashTool,
   createLocalBashOperations,
 } from "@mariozechner/pi-coding-agent";
-import { execFileSync } from "node:child_process";
-
-const REWRITE_TIMEOUT_MS = 5000;
 
 function rtkRewriteCommand(command: string): string | undefined {
   try {
-    return execFileSync("rtk", ["rewrite", command], {
-      encoding: "utf-8",
-      timeout: REWRITE_TIMEOUT_MS,
-    }).trimEnd();
+    return rtkify(command);
   } catch {
     return undefined;
   }

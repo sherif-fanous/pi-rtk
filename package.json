@@ -48,5 +48,8 @@
     "extensions": [
       "./index.ts"
     ]
+  },
+  "dependencies": {
+    "@arthur-fontaine/rtkify": "^1.0.0"
   }
 }
