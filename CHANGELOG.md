@@ -2,6 +2,12 @@
 
 This changelog follows [Common Changelog](https://common-changelog.org/).
 
+## [0.4.0] - 2026-05-12
+
+### Fixed
+
+- The extension now applies rtk rewrites for the vast majority of shell commands. Previously, rewrites were silently dropped for every command outside a narrow read-only allow-list (`ls`, `grep`, `find`, `wc`, `cat`) — meaning `head`, `tail`, every pipe ending in head/tail, and every destructive command ran in their original un-rewritten form and produced no token savings. The extension now applies rtk's rewrite whenever one is produced, with Pi's existing per-command approval continuing to gate execution. ([#2](https://github.com/sherif-fanous/pi-rtk/issues/2))
+
 ## [0.3.0] - 2026-03-18
 
 ### Changed
@@ -18,6 +24,7 @@ This changelog follows [Common Changelog](https://common-changelog.org/).
 
 _Initial release._
 
+[0.4.0]: https://github.com/sherif-fanous/pi-rtk/releases/tag/v0.4.0
 [0.3.0]: https://github.com/sherif-fanous/pi-rtk/releases/tag/v0.3.0
 [0.2.0]: https://github.com/sherif-fanous/pi-rtk/releases/tag/v0.2.0
 [0.1.0]: https://github.com/sherif-fanous/pi-rtk/releases/tag/v0.1.0

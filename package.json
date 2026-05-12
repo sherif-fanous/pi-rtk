@@ -1,6 +1,6 @@
 {
   "name": "@sherif-fanous/pi-rtk",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Pi extension that routes bash commands through rtk (Rust Token Killer) for LLM token savings",
   "keywords": [
     "pi",
@@ -32,12 +32,23 @@
     "sort-package-json": "npx sort-package-json",
     "type-check": "tsc --noEmit"
   },
+  "prettier": {
+    "importOrder": [
+      "<BUILTIN_MODULES>",
+      "",
+      "<THIRD_PARTY_MODULES>"
+    ],
+    "importOrderTypeScriptVersion": "6.0.0",
+    "plugins": [
+      "@ianvs/prettier-plugin-sort-imports"
+    ]
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@mariozechner/pi-coding-agent": "^0.60.0",
     "@types/node": "^25.5.0",
     "eslint-config-prettier": "10.1.8",
-    "prettier": "3.8.1",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.1"
   },
@@ -48,5 +59,15 @@
     "extensions": [
       "./index.ts"
     ]
+  },
+  "dependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.3.0",
+    "eslint-plugin-perfectionist": "^5.9.0",
+    "eslint-plugin-unicorn": "^64.0.0",
+    "fallow": "^2.71.1",
+    "sort-package-json": "^3.6.1"
   }
 }
