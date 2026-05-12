@@ -19,7 +19,7 @@ import {
   createBashTool,
   createLocalBashOperations,
   type ExtensionAPI,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 
 const REWRITE_TIMEOUT_MS = 5000;
 

@@ -44,30 +44,28 @@
     ]
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "@earendil-works/pi-coding-agent": "^0.74.0",
     "@eslint/js": "^10.0.1",
-    "@mariozechner/pi-coding-agent": "^0.60.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^25.5.0",
+    "eslint": "^10.3.0",
     "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-perfectionist": "^5.9.0",
+    "eslint-plugin-unicorn": "^64.0.0",
+    "fallow": "^2.71.1",
     "prettier": "^3.8.1",
+    "sort-package-json": "^3.6.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.1"
   },
   "peerDependencies": {
-    "@mariozechner/pi-coding-agent": "*"
+    "@earendil-works/pi-coding-agent": "*"
   },
   "pi": {
     "extensions": [
       "./index.ts"
     ]
-  },
-  "dependencies": {
-    "@biomejs/biome": "^2.4.15",
-    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@stylistic/eslint-plugin": "^5.10.0",
-    "eslint": "^10.3.0",
-    "eslint-plugin-perfectionist": "^5.9.0",
-    "eslint-plugin-unicorn": "^64.0.0",
-    "fallow": "^2.71.1",
-    "sort-package-json": "^3.6.1"
   }
 }
