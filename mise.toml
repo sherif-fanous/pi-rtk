@@ -1,0 +1,60 @@
+[env]
+_.file = ".env"
+_.path = ["{{config_root}}/node_modules/.bin"]
+
+[tasks.check]
+depends = ["format-check", "type-check", "lint"]
+
+[tasks.fallow]
+depends = ["fallow-dead-code", "fallow-dupes"]
+
+[tasks.fallow-dead-code]
+run = "fallow dead-code"
+
+[tasks.fallow-dupes]
+run = "fallow dupes"
+
+[tasks.format]
+run = "prettier --write eslint.config.mjs package.json *.ts tsconfig.json"
+
+[tasks.format-check]
+run = "prettier --check eslint.config.mjs package.json *.ts tsconfig.json"
+
+[tasks.install-deps]
+run = "pnpm add --save-prod"
+
+[tasks.install-dev-deps]
+run = "pnpm add --save-dev"
+
+[tasks.lint]
+run = "biome lint . && eslint ."
+
+[tasks.lint-fix]
+run = "biome lint . --fix && eslint . --fix"
+
+[tasks.login]
+run = "pnpm login"
+
+[tasks.pack-check]
+depends = ["check"]
+run = "pnpm pack --dry-run"
+
+[tasks.publish]
+depends = ["pack-check"]
+run = "pnpm publish --access public"
+
+[tasks.sort-package-json]
+run = "sort-package-json"
+
+[tasks.type-check]
+run = "tsc --noEmit"
+
+[tasks.uninstall-deps]
+run = "pnpm remove"
+
+[tasks.update-deps]
+run = "pnpm update"
+
+[tools]
+node = "lts"
+"npm:pnpm" = "latest"
