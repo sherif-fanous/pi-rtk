@@ -89,6 +89,13 @@ non-obvious from the code alone.
   handler preserves that intent. Do NOT remove the guard "because
   the rewrite is harmless" — the guard is about output visibility,
   not rewrite safety.
+- **The `user_bash` rewrite is computed once and reused.** The
+  handler probes `rtk rewrite` to decide whether to claim an event,
+  then captures that probe result for the returned exec operation
+  instead of spawning `rtk rewrite` again. This relies on Pi's
+  upstream guarantee that `pi-coding-agent`
+  `modes/interactive/interactive-mode.js::handleBashCommand` passes
+  the original event command through to `operations.exec` unchanged.
 
 ### Documentation
 
