@@ -70,18 +70,16 @@ export default function (pi: ExtensionAPI) {
       return;
     }
 
-    if (!rtkRewriteCommand(event.command)) {
+    const rewritten = rtkRewriteCommand(event.command);
+
+    if (rewritten === undefined) {
       return;
     }
 
     return {
       operations: {
-        exec: (command, cwd, options) => {
-          return localBashOperations.exec(
-            rtkRewriteCommand(command) ?? command,
-            cwd,
-            options,
-          );
+        exec: (_command, cwd, options) => {
+          return localBashOperations.exec(rewritten, cwd, options);
         },
       },
     };
