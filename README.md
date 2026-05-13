@@ -108,6 +108,23 @@ User !!<cmd>
     bypass pi-rtk and use normal Pi context-excluded shell handling
 ```
 
+## `/rtk` Slash Command
+
+`pi-rtk` registers a `/rtk` slash command for session-scoped control:
+
+- `/rtk enable` turns command rewriting on for the current Pi session.
+- `/rtk disable` turns command rewriting off for the current Pi session.
+- `/rtk status` shows the current toggle state, detected `rtk` binary details, and a bypass tip.
+- `/rtk` opens an overlay where you can choose the same actions interactively.
+
+The footer includes a persistent `pi-rtk` status indicator: `rtk ✓` in green when rewriting is enabled, `rtk ✗` in red when disabled.
+
+The toggle is in-memory only. It resets to enabled every time Pi restarts and is not written to disk. For a single-command bypass while leaving the session toggle enabled, use rtk's per-command form:
+
+```shell
+!RTK_DISABLED=1 <cmd>
+```
+
 ## What pi-rtk Does Not Do
 
 `pi-rtk` is a rewrite shim. It does not gate, prompt for, sandbox, or deny commands based on their content, including when `rtk rewrite` surfaces a deny verdict.
