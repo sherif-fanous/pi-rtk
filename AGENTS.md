@@ -53,50 +53,6 @@ are auto-fixable via `mise run format` or `mise run lint-fix`.
 The conventions below are the ones the linter cannot enforce. They are
 project-wide unless noted.
 
-### Rewrite contract
-
-pi-rtk is a thin shim: the entire extension is a single `index.ts`
-that wires `rtk rewrite` into Pi's bash execution paths. The
-conventions below codify decisions baked into that file that are
-non-obvious from the code alone.
-
-- **Trust rtk's stdout, not its exit code.** `rtk rewrite` returns a
-  four-valued permission verdict via exit code (0 = allow, 1 = no
-  equivalent, 2 = deny, 3 = ask). Pi has its own per-tool approval
-  flow for bash commands, so `rtkRewriteCommand` ignores the exit
-  code and treats non-empty stdout as the authoritative rewrite. Do
-  NOT "fix" this back to `execFileSync` or to a `result.status === 0`
-  check — the exit-3 case is the dominant success path on modern rtk,
-  and the previous-execFileSync version silently dropped every
-  rewrite. See the in-source comment block above `rtkRewriteCommand`
-  for the full rationale and the issue-#2 / PR-#3 history.
-- **Return `undefined` to signal "no rewrite available".** Both
-  call sites (`spawnHook` and `user_bash`) chain through `?? command`
-  so that an undefined return causes a clean fall-through to the
-  original command. The two cases that produce `undefined` are:
-  rtk's empty-stdout "no equivalent" reply (exit 1) and any spawn
-  failure (rtk missing from PATH, timeout). Both are caller-invisible
-  by design.
-- **`REWRITE_TIMEOUT_MS = 5000` is the rtk-rewrite bound, not the
-  user-command bound.** If `rtk rewrite` itself hangs, fall through
-  to running the bare command after 5 seconds. The constant lives at
-  module scope (not inlined) so future tuning has one place to edit
-  and it shows up in `git log -L` cleanly.
-- **`!<cmd>` is intercepted, `!!<cmd>` is not.** Pi's `!!<cmd>` form
-  marks shell output as excluded from model context. Intercepting it
-  here would expose the model to output the user explicitly chose to
-  hide; the `event.excludeFromContext` guard in the `user_bash`
-  handler preserves that intent. Do NOT remove the guard "because
-  the rewrite is harmless" — the guard is about output visibility,
-  not rewrite safety.
-- **The `user_bash` rewrite is computed once and reused.** The
-  handler probes `rtk rewrite` to decide whether to claim an event,
-  then captures that probe result for the returned exec operation
-  instead of spawning `rtk rewrite` again. This relies on Pi's
-  upstream guarantee that `pi-coding-agent`
-  `modes/interactive/interactive-mode.js::handleBashCommand` passes
-  the original event command through to `operations.exec` unchanged.
-
 ### Documentation
 
 - Every source file opens with a module-level JSDoc block stating:

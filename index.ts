@@ -24,30 +24,20 @@ import {
 const REWRITE_TIMEOUT_MS = 5000;
 
 function rtkRewriteCommand(command: string): string | undefined {
-  // rtk's exit codes encode permission verdicts (0 = allow, 1 = no equivalent,
-  // 2 = deny, 3 = ask). Pi has its own approval flow for bash tool calls, so we
-  // trust stdout as the rewrite and let Pi gate execution. We only skip the
-  // rewrite when rtk explicitly produced no replacement (exit 1, empty stdout),
-  // produced a deny verdict without a rewrite (exit 2, empty stdout), or when
-  // rtk itself failed to run.
-  //
-  // rtk's exit 2 deny verdict is derived from its own permission rules, loaded
-  // by src/hooks/permissions.rs::load_permission_rules. Those rules do not map
-  // cleanly onto Pi's permission model, so command-level gating in Pi remains
-  // the responsibility of Pi's approval flow or a dedicated Pi permission
-  // extension. See the README's "What pi-rtk Does Not Do" section for the
-  // user-facing rationale.
+  // rtk's exit codes are permission verdicts (0/1/2/3 = allow/no-equiv/deny/
+  // ask). We trust stdout and ignore the exit code. The deny verdict is
+  // intentionally not enforced — this shim rewrites, it does not gate.
   try {
     const result = spawnSync("rtk", ["rewrite", command], {
       encoding: "utf-8",
       timeout: REWRITE_TIMEOUT_MS,
     });
 
-    if (result.error) return undefined; // spawn failed (rtk not on PATH, timeout, etc.)
+    if (result.error) return undefined;
 
     const out = (result.stdout ?? "").trimEnd();
 
-    return out.length > 0 ? out : undefined; // empty stdout = exit 1 OR exit 2
+    return out.length > 0 ? out : undefined; // empty stdout = exit 1 or 2
   } catch {
     return undefined;
   }
