@@ -107,3 +107,13 @@ User !!<cmd>
         ▼
     bypass pi-rtk and use normal Pi context-excluded shell handling
 ```
+
+## What pi-rtk Does Not Do
+
+`pi-rtk` is a rewrite shim. It does not gate, prompt for, sandbox, or deny commands based on their content, including when `rtk rewrite` surfaces a deny verdict.
+
+That scope is intentional. `rtk`'s deny verdict comes from a permission source that does not match Pi's permission model, and Pi's built-in approval flow plus Pi's extension ecosystem cover command gating better as composable layers.
+
+If you want command-level permissions, guardrails, or shields, install a dedicated Pi extension for that. Browse [pi.dev/packages](https://pi.dev/packages) filtered by extension and search for terms like `permission`, `guardrail`, or `shield`.
+
+Those extensions compose with `pi-rtk`: they block disallowed commands at execution time, whether or not `pi-rtk` has rewritten the command.

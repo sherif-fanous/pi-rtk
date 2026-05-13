@@ -101,7 +101,7 @@ non-obvious from the code alone.
 - Comments explain _why_, not _what_. Common patterns: rationale on
   decisions that contradict an obvious "fix" (the exit-code-trust
   block), inline notes naming exit-code-meaning relationships
-  (`// empty stdout = exit 1 "no rtk equivalent"`), and any
+  (`// empty stdout = exit 1 OR exit 2`), and any
   `try/catch` guard whose existence depends on rtk's contract.
 - Lifecycle handlers (`user_bash`, `bashTool.spawnHook`) wrap calls
   in defense-in-depth handling for the rtk-unavailable / rtk-hangs
