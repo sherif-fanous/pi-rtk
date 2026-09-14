@@ -39,6 +39,18 @@
       "<THIRD_PARTY_MODULES>"
     ],
     "importOrderTypeScriptVersion": "6.0.0",
+    "overrides": [
+      {
+        "files": [
+          "*.md",
+          "*.mdx"
+        ],
+        "options": {
+          "printWidth": 80,
+          "proseWrap": "always"
+        }
+      }
+    ],
     "plugins": [
       "@ianvs/prettier-plugin-sort-imports"
     ]
